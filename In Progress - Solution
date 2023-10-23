@@ -1,0 +1,12 @@
+Enumeration: 
+            sudo nmap -p 1-65535 10.10.18.17
+              nmap -p 8689 -sV webapp.local   #command which I used to find the service webshare.local was using
+
+Exploitation:
+            curl http://webapp.local:8689/    
+
+            gobuster dir -u http://webapp.local:8689 -w /opt/wordlist.txt
+
+            gobuster dir -u http://webapp.local:8689 -w /opt/common.txt
+
+            curl http://webapp.local:8689/robots.txt
