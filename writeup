@@ -1,0 +1,54 @@
+
+FLAG 2: 
+
+Enumeration: 
+            sudo nmap -p 1-65535 10.10.18.17
+            nmap -p 15865 -sV 10.10.18.17   #command which I used to find the service webshare.local was using
+Exploitation:
+            curl http://webapp.local:15865/    
+            gobuster dir -u http://webapp.local:15865 -w /opt/wordlist.txt
+            gobuster dir -u http://webapp.local:15865 -w /opt/common.txt
+            curl http://webapp.local:15865/robots.txt
+            curl http://webapp.local:15865/musicnews/robots.txt -> FLAG FOUND
+
+FLAG 3:
+Enumeration: 
+            enum4linux 10.10.18.95
+            smbclient //share.local/share -U nobody          #Just leave the password field blank when ask for password
+            ls
+            more flag.txt -> FLAG FOUND
+
+FLAG 4:
+Enumeration: 
+            smbclient //share.local/secure-share -U hodor
+            ls
+            more README.txt -> FLAG FOUND
+
+FLAG 5:
+Enumeration: 
+            udo nmap -sU -p 1-65535 --min-rate 1000 udp.local
+            nc -u udp.local 14634 -> FLAG FOUND
+
+ADDITIONAL QUESTIONS:
+1 -> HTTP
+2 -> nobody and hodor
+3 -> 
+
+APPENDIX:
+!/bin/bash
+
+search="CY243L"
+
+for ((i=0; i<100; i++)); do
+  URL="http://webapp.local:15865/musicnews/flag$i.txt"
+
+  flag=$(curl -s "$URL")
+
+  if [[ "$flag" == CY243L* ]]; then
+  echo "Flag found at $i ... Opening flag$i.txt...."
+        break
+  fi
+done
+
+echo "FLAG : $flag"
+
